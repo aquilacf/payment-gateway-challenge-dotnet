@@ -1,29 +1,31 @@
-using PaymentGateway.Api.Services;
+using PaymentGateway.Api;
+using PaymentGateway.Application;
+using PaymentGateway.Infrastructure;
+using PaymentGateway.ServiceDefaults;
+
+using Scalar.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.AddServiceDefaults();
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-
-builder.Services.AddSingleton<PaymentsRepository>();
+builder.Services
+    .AddPresentation()
+    .AddApplication()
+    .AddInfratructure();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseExceptionHandler();
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
+    app.MapOpenApi();
+    app.MapScalarApiReference();
 }
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
-
-app.MapControllers();
+app.MapDefaultEndpoints();
+app.MapEndpoints();
 
 app.Run();

@@ -1,0 +1,25 @@
+// http file in rider works different from other editors, variables might not work
+@HostAddress = https://localhost:7092
+
+### 1. Payment Request
+POST {{HostAddress}}/payments
+Content-Type: application/json
+
+{
+  "card_number": "1111111111111111111",
+  "expiry_month": 12,
+  "expiry_year": 2028,
+  "currency": "GBP",
+  "amount": 2537,
+  "cvv": "866"
+}
+
+> {% client.global.set("payment_id", response.body.id); %}
+
+### 2. Payment Details
+GET {{HostAddress}}/payments/{{payment_id}}
+
+
+### OpenAPI
+GET {{HostAddress}}/openapi/v1.json
+
