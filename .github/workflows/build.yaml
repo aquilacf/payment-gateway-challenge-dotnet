@@ -21,6 +21,9 @@ jobs:
         with:
           dotnet-version: "9.x.x"
 
+      - name: Install dotnet dev-certs
+        run: dotnet dev-certs https --trust
+
       - name: Restore packages
         run: dotnet restore
 

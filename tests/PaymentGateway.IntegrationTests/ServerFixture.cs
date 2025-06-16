@@ -10,7 +10,7 @@ public sealed class ServerFixture : IAsyncLifetime
     private ResourceNotificationService? _notificationService;
     private HttpClient? _httpClient;
 
-    private static readonly TimeSpan DefaultTimeout = TimeSpan.FromMinutes(1);
+    private static readonly TimeSpan DefaultTimeout = TimeSpan.FromMinutes(5);
 
     public async ValueTask InitializeAsync()
     {
