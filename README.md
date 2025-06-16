@@ -7,7 +7,7 @@ Requirements to run the project:
 - .NET SDK 9
 
 ```shell
-cd applications/tools/AquilaFreitas.AppHost
+cd tools/PaymentGateway.AppHost
 dotnet run
 ```
 
