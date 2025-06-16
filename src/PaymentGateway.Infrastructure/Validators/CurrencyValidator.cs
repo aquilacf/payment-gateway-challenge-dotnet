@@ -7,7 +7,8 @@ namespace PaymentGateway.Infrastructure.Validators;
 public sealed class CurrencyValidator : IValidator<string>
 {
     public const string PropertyName = "currency";
-
+    
+    // Ideally currencies should be loaded from a configuration and injected with dependency injection
     private readonly string[] _currencies = ["GBP", "BRL", "USD"];
 
     public IEnumerable<ValidationResult> Validate(string? value)

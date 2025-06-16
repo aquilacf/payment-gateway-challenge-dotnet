@@ -12,4 +12,47 @@ services:
       - type: bind
         source: ./imposters
         target: /imposters
-      
+  
+  aspire-dashboard:
+    image: "mcr.microsoft.com/dotnet/aspire-dashboard:9.0"
+    environment:
+      Dashboard__Otlp__AuthMode: "Unsecured"
+      Dashboard__Frontend__AuthMode: "BrowserToken"
+      Dashboard:Frontend:BrowserToken: "test123"
+    ports:
+      - "18888:18888"
+    restart: unless-stopped
+  
+  paymentgateway.api:
+    image: paymentgateway.api
+    build:
+      context: .
+      dockerfile: src/PaymentGateway.Api/Dockerfile
+  
+  api:
+    image: paymentgateway.api
+    build:
+      context: .
+      dockerfile: src/PaymentGateway.Api/Dockerfile
+
+    environment:
+      OTEL_BLRP_SCHEDULE_DELAY: 1000
+      OTEL_BSP_SCHEDULE_DELAY: 1000
+      OTEL_DOTNET_EXPERIMENTAL_ASPNETCORE_DISABLE_URL_QUERY_REDACTION: true
+      OTEL_DOTNET_EXPERIMENTAL_HTTPCLIENT_DISABLE_URL_QUERY_REDACTION: true
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EVENT_LOG_ATTRIBUTES: true
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_EMIT_EXCEPTION_LOG_ATTRIBUTES: true
+      OTEL_DOTNET_EXPERIMENTAL_OTLP_RETRY: "in_memory"
+      OTEL_EXPORTER_OTLP_ENDPOINT: "http://aspire-dashboard:18889"
+      OTEL_EXPORTER_OTLP_PROTOCOL: "grpc"
+      OTEL_METRICS_EXEMPLAR_FILTER: "trace_based"
+      OTEL_METRIC_EXPORT_INTERVAL: 1000
+      OTEL_TRACES_SAMPLER: "always_on"
+      OTEL_SERVICE_NAME: "api"
+      OTEL_RESOURCE_ATTRIBUTES: "service.instance.id=api-1"
+      DOTNET_ENVIRONMENT: Development
+      services__bank-simulator__bank__0: bank_simulator:8080
+      ASPNETCORE_HTTP_PORTS: 5000
+    ports:
+      - "5000:5000"
+   

@@ -19,8 +19,3 @@ public sealed record AcquiringBankResponse
     public required bool Authorized { get; init; }
     public required string AuthorizationCode { get; init; }
 }
-
-public sealed record AcquiringBankResponseError
-{
-    public string? ErrorMessage { get; init; }
-}

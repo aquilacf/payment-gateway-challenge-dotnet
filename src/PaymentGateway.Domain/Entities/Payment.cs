@@ -13,5 +13,6 @@ public sealed class Payment
     public int? Amount { get; set; }
 
     public string? AuthorizationCode { get; set; }
+    // The requirements imply that even rejected payments should be retrieved later one, so bad requests errors must be stored?
     public Dictionary<string, string?[]>? Errors { get; set; }
 }

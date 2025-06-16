@@ -9,20 +9,19 @@ namespace PaymentGateway.Infrastructure.Services;
 
 public sealed class MountebankService(ILogger<MountebankService> logger, HttpClient bankClient) : IAcquiringBankService
 {
-    public async Task<AcquiringBankResponse?> ProcessAsync(AcquiringBankRequest request)
+    public async Task<AcquiringBankResponse?> ProcessAsync(AcquiringBankRequest request) // Would be wiser to pass cancellation token
     {
         var response = await bankClient.PostAsJsonAsync("/payments", request, Constants.DefaultJsonSerializerOptions);
 
         if (response.IsSuccessStatusCode)
         {
-            logger.LogInformation("success");
             var content =
                 await response.Content.ReadFromJsonAsync<AcquiringBankResponse>(Constants.DefaultJsonSerializerOptions);
 
             return content;
         }
 
-        logger.LogError("error");
+        logger.LogError("Acquiring bank has failed with {StatusCode}", response.StatusCode);
         return null;
     }
 }

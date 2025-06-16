@@ -1,7 +1,8 @@
 // http file in rider works different from other editors, variables might not work
-@HostAddress = https://localhost:7092
+// docker host: http://localhost:5000
+@HostAddress = https://localhost:7092 
 
-### 1. Payment Request
+### 1. Payment Request (valid)
 POST {{HostAddress}}/payments
 Content-Type: application/json
 
@@ -20,6 +21,45 @@ Content-Type: application/json
 GET {{HostAddress}}/payments/{{payment_id}}
 
 
-### OpenAPI
-GET {{HostAddress}}/openapi/v1.json
+### 3. Payment Request (declined)
+POST {{HostAddress}}/payments
+Content-Type: application/json
 
+{
+  "card_number": "1111111111111111112",
+  "expiry_month": 12,
+  "expiry_year": 2028,
+  "currency": "GBP",
+  "amount": 2537,
+  "cvv": "866"
+}
+
+> {% client.global.set("payment_id", response.body.id); %}
+
+### 3. Payment Request (rejected)
+POST {{HostAddress}}/payments
+Content-Type: application/json
+
+{
+  "card_number": "1111111111111111111",
+  "expiry_month": 12,
+  "expiry_year": 1111,
+  "currency": "GBP",
+  "amount": 2537,
+  "cvv": "866"
+}
+
+> {% client.global.set("payment_id", response.body.id); %}
+
+### 3. Payment Request (unprocessable)
+POST {{HostAddress}}/payments
+Content-Type: application/json
+
+{
+  "card_number": "1111111111111111110",
+  "expiry_month": 12,
+  "expiry_year": 2028,
+  "currency": "GBP",
+  "amount": 2537,
+  "cvv": "866"
+}
