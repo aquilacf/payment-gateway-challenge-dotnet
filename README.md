@@ -18,7 +18,7 @@ How to test (requires aspire for DistributedApplicationTestingBuilder):
 ```shell
 dotnet test
 ```
-⚠️ Make sure you have trusted dotnet certifications with: dotnet dev-certs https --trust
+⚠️ Make sure you have trusted dotnet certificates with: dotnet dev-certs https --trust
 
 As an alternative to Aspire, use docker compose:
 
